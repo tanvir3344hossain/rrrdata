@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>CSE AI Centre - ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটি</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: বাংলা ও ইংরেজি সাপোর্ট, Inter ও Noto Sans Bengali -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      scroll-behavior: smooth;
+      line-height: 1.5;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #3b82f6;
+      border-radius: 20px;
+    }
+
+    /* navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+      padding: 1rem 2rem;
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      font-size: 1.8rem;
+      color: #2563eb;
+      background: #eff6ff;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 30px;
+    }
+
+    .logo-text h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #0f172a;
+    }
+
+    .logo-text span {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #2563eb;
+      background: #e0f2fe;
+      padding: 2px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #1e293b;
+      transition: 0.2s;
+      font-size: 1rem;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: #2563eb;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #0f172a;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 75%;
+      max-width: 320px;
+      height: 100%;
+      background: white;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+      z-index: 1100;
+      padding: 2rem 1.5rem;
+      transition: right 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .mobile-menu.open {
+      right: 0;
+    }
+
+    .close-menu {
+      align-self: flex-end;
+      background: none;
+      border: none;
+      font-size: 1.7rem;
+      cursor: pointer;
+      color: #334155;
+    }
+
+    .mobile-menu a {
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1e293b;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .mobile-menu a:hover {
+      color: #2563eb;
+      padding-right: 0.5rem;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(2px);
+      z-index: 1050;
+      display: none;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* popup modal (5 সেকেন্ড) */
+    .popup-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
+
+    .popup-modal.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .popup-card {
+      background: linear-gradient(145deg, #ffffff, #f9fcff);
+      max-width: 460px;
+      width: 85%;
+      border-radius: 2rem;
+      padding: 2rem 1.8rem;
+      text-align: center;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 0.4s ease;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .popup-card i {
+      font-size: 4rem;
+      color: #2563eb;
+      background: #eef2ff;
+      padding: 1rem;
+      border-radius: 60px;
+    }
+
+    .popup-card h2 {
+      margin: 1rem 0 0.5rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .popup-card p {
+      color: #334155;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .popup-close {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.6rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: 0.2s;
+    }
+
+    .popup-close:hover {
+      background: #1d4ed8;
+    }
+
+    /* main content */
+    main {
+      margin-top: 85px;
+    }
+
+    section {
+      padding: 4rem 2rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%);
+      border-radius: 2rem;
+      margin: 1rem auto 2rem auto;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .hero-content {
+      flex: 1;
+    }
+
+    .hero-content h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(120deg, #1e3a8a, #3b82f6);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      line-height: 1.3;
+    }
+
+    .hero-content p {
+      font-size: 1.1rem;
+      color: #334155;
+      margin: 1rem 0 1.5rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+      padding: 0.75rem 1.6rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #2563eb;
+      color: #2563eb;
+      padding: 0.7rem 1.6rem;
+      border-radius: 40px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 70%;
+      height: 4px;
+      background: #3b82f6;
+      border-radius: 4px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      transition: 0.25s;
+      border: 1px solid #eef2ff;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card i {
+      font-size: 2.5rem;
+      color: #2563eb;
+      margin-bottom: 1rem;
+    }
+
+    .two-col {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    .col {
+      flex: 1;
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+      border: 1px solid #e2e8f0;
+    }
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    footer {
+      background: #0f172a;
+      color: #cbd5e1;
+      padding: 2rem;
+      text-align: center;
+    }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    @media (max-width: 800px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+      .hero-content h2 { font-size: 1.9rem; }
+      section { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- পপআপ মোডাল (5 সেকেন্ড পরে দেখাবে) -->
+<div id="welcomePopup" class="popup-modal">
+  <div class="popup-card">
+    <i class="fas fa-robot"></i>
+    <h2>🎉 স্বাগতম!</h2>
+    <p><strong>CSE AI Centre</strong> — ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটির কৃত্রিম বুদ্ধিমত্তা গবেষণা ও উদ্ভাবন কেন্দ্রে আপনাকে স্বাগতম।</p>
+    <p style="font-size:0.9rem;">এআই ভবিষ্যৎ গড়তে আমরা পাশে আছি।</p>
+    <button class="popup-close" id="closePopupBtn"><i class="fas fa-thumbs-up"></i> শুরু করুন</button>
+  </div>
+</div>
+
+<header>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo-area">
+        <div class="logo-icon"><i class="fas fa-brain"></i></div>
+        <div class="logo-text">
+          <h1>CSE AI Centre</h1>
+          <span>ডিআইইউ</span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="#home" class="nav-link active">হোম</a>
+        <a href="#about" class="nav-link">পরিচিতি</a>
+        <a href="#research" class="nav-link">গবেষণা</a>
+        <a href="#events" class="nav-link">ইভেন্ট</a>
+        <a href="#contact" class="nav-link">যোগাযোগ</a>
+      </div>
+      <button class="hamburger" id="hamburgerBtn" aria-label="মেনু"><i class="fas fa-bars"></i></button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="close-menu" id="closeMenuBtn"><i class="fas fa-times"></i></button>
+    <a href="#home">হোম</a>
+    <a href="#about">পরিচিতি</a>
+    <a href="#research">গবেষণা</a>
+    <a href="#events">ইভেন্ট</a>
+    <a href="#contact">যোগাযোগ</a>
+  </div>
+  <div class="overlay" id="overlay"></div>
+</header>
+
+<main>
+  <!-- হোম সেকশন -->
+  <section id="home">
+    <div class="hero">
+      <div class="hero-content">
+        <h2>কৃত্রিম বুদ্ধিমত্তায় ভবিষ্যৎ গঠন</h2>
+        <p><strong>ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটির CSE AI Centre</strong> — এআই গবেষণা, শিক্ষা এবং উদ্ভাবনের একটি আধুনিক কেন্দ্র। আমরা তৈরি করছি আগামীর প্রযুক্তি নির্মাতা।</p>
+        <div class="btn-group">
+          <a href="#about" class="btn-primary">কেন্দ্র সম্পর্কে <i class="fas fa-arrow-right"></i></a>
+          <a href="#contact" class="btn-outline">যোগ দিন <i class="fas fa-user-plus"></i></a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div style="background: #e0f2fe; border-radius: 48px; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 25px -8px rgba(0,0,0,0.1);">
+          <i class="fas fa-microchip" style="font-size: 5.5rem; color: #2563eb;"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- পরিচিতি -->
+  <section id="about">
+    <h2 class="section-title">✨ AI কেন্দ্রের পরিচিতি</h2>
+    <div class="two-col">
+      <div class="col">
+        <i class="fas fa-university" style="font-size: 2rem; color:#2563eb;"></i>
+        <h3 style="margin:0.8rem 0 0.5rem;">আমরা কে?</h3>
+        <p>ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটির কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং বিভাগের অংশ হিসেবে CSE AI Centre গড়ে উঠেছে আন্তঃবিষয়ক গবেষণা, শিল্প সহযোগিতা এবং দক্ষতা উন্নয়নের লক্ষ্যে।</p>
+      </div>
+      <div class="col">
+        <i class="fas fa-chalkboard-user" style="font-size: 2rem; color:#2563eb;"></i>
+        <h3 style="margin:0.8rem 0 0.5rem;">দৃষ্টি ও মিশন</h3>
+        <p>এআই নেতৃত্ব তৈরি করা, নৈতিক প্রযুক্তির বিকাশ এবং বাংলাদেশকে এআই এক্সিলেন্সের হাবে পরিণত করা। আন্তর্জাতিক মানের গবেষণা ও ইন্ডাস্ট্রি ৪.০-এর জন্য দক্ষ মানবসম্পদ গড়া।</p>
+      </div>
+    </div>
+    <div class="cards-grid">
+      <div class="card">
+        <i class="fas fa-microchip"></i>
+        <h3>অত্যাধুনিক ল্যাব</h3>
+        <p>জিপিইউ ক্লাস্টার, এজ এআই ও ডিপ লার্নিং সিমুলেশন সুবিধা।</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-graduation-cap"></i>
+        <h3>একাডেমিক প্রোগ্রাম</h3>
+        <p>এআই ও মেশিন লার্নিং, গবেষণা থিসিস এবং শিল্প-ভিত্তিক সার্টিফিকেট।</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-globe"></i>
+        <p><strong>বৈশ্বিক সহযোগিতা</strong> — বিশ্ববিদ্যালয় ও প্রযুক্তি প্রতিষ্ঠানের সাথে যৌথ গবেষণা।</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- গবেষণা -->
+  <section id="research">
+    <h2 class="section-title">🔬 গবেষণা ক্ষেত্র</h2>
+    <div class="cards-grid">
+      <div class="card"><i class="fas fa-eye"></i><h3>কম্পিউটার ভিশন</h3><p>মেডিকেল ইমেজ এনালাইসিস, অবজেক্ট ডিটেকশন ও রিয়েল-টাইম ভিডিও প্রসেসিং।</p></div>
+      <div class="card"><i class="fas fa-comment-dots"></i><h3>এনএলপি & এলএলএম</h3><p>বাংলা ল্যাঙ্গুয়েজ মডেল, সেন্টিমেন্ট অ্যানালাইসিস ও চ্যাটবট।</p></div>
+      <div class="card"><i class="fas fa-chart-line"></i><h3>প্রেডিক্টিভ অ্যানালিটিক্স</h3><p>টাইম সিরিজ ফোরকাস্টিং, রিকমেন্ডার সিস্টেম ও ফিনটেক এআই।</p></div>
+      <div class="card"><i class="fas fa-robot"></i><h3>রোবোটিক্স & অটোনমি</h3><p>স্বয়ংক্রিয় নেভিগেশন, ড্রোন প্রযুক্তি ও স্মার্ট কন্ট্রোল সিস্টেম।</p></div>
+    </div>
+    <div style="margin-top: 2rem; background: #eef2ff; padding: 1.4rem; border-radius: 1.5rem; text-align: center;">
+      <i class="fas fa-flask"></i> <strong>চলমান প্রকল্প:</strong> এআই-চালিত কৃষি উপদেষ্টা, স্মার্ট ক্যাম্পাস অ্যাসিস্ট্যান্ট, হেলথকেয়ার ডায়াগনস্টিক সাপোর্ট ও বাংলা জেনারেটিভ এআই মডেল।
+    </div>
+  </section>
+
+  <!-- ইভেন্ট ও সংবাদ -->
+  <section id="events">
+    <h2 class="section-title">📅 ইভেন্ট ও সংবাদ</h2>
+    <div class="two-col">
+      <div class="col">
+        <i class="fas fa-calendar-alt"></i>
+        <h3 style="margin: 0.7rem 0;">আগামী ইভেন্ট</h3>
+        <div class="list-item"><i class="fas fa-chalkboard"></i><div><strong>এলএলএম ফাইন-টিউনিং কর্মশালা</strong><br>১৫ জুন, ২০২৫ | ডিআইইউ ক্যাম্পাস</div></div>
+        <div class="list-item"><i class="fas fa-microphone-alt"></i><div><strong>এআই নীতিমালা নিয়ে গেস্ট লেকচার</strong><br>২ জুলাই, ২০২৫ | অনলাইন + অডিটোরিয়াম</div></div>
+        <div class="list-item"><i class="fas fa-code-branch"></i><div><strong>হ্যাকাথন: এসডিজির জন্য এআই</strong><br>১০-১২ আগস্ট, ২০২৫ | রেজিস্ট্রেশন খোলা</div></div>
+      </div>
+      <div class="col">
+        <i class="fas fa-newspaper"></i>
+        <h3 style="margin: 0.7rem 0;">সাম্প্রতিক সাফল্য</h3>
+        <div class="list-item"><i class="fas fa-award"></i><div>এআই সেন্টার আইসিটি বিভাগ থেকে গবেষণা অনুদান পেয়েছে।</div></div>
+        <div class="list-item"><i class="fas fa-users"></i><div>বিশ্বব্যাপী এআই ল্যাবের সাথে শিক্ষার্থী বিনিময় চুক্তি স্বাক্ষরিত।</div></div>
+        <div class="list-item"><i class="fas fa-file-alt"></i><div>ICML 2025 ওয়ার্কশপে পাঁচটি গবেষণাপত্র গৃহীত।</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- যোগাযোগ -->
+  <section id="contact">
+    <h2 class="section-title">📞 যোগাযোগ</h2>
+    <div class="two-col">
+      <div class="col">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3 style="margin: 0.5rem 0;">ঠিকানা</h3>
+        <p>CSE AI Centre, ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটি,<br> আশুলিয়া, ঢাকা - ১৩৪১, বাংলাদেশ।</p>
+        <p><i class="fas fa-phone-alt"></i> +৮৮০ ১২৩৪ ৫৬৭৮৯০</p>
+        <p><i class="fas fa-envelope"></i> ai.centre@daffodilvarsity.edu.bd</p>
+      </div>
+      <div class="col">
+        <i class="fas fa-clock"></i>
+        <h3 style="margin: 0.5rem 0;">অফিস সময়</h3>
+        <p>রবিবার - বৃহস্পতিবার: সকাল ৯টা – বিকাল ৫টা</p>
+        <p>শুক্র ও শনিবার: বন্ধ (ওয়ার্কশপ ব্যতীত)</p>
+        <div style="margin-top: 1.5rem;">
+          <a href="#" style="color:#2563eb; margin-right: 1rem;"><i class="fab fa-facebook fa-lg"></i></a>
+          <a href="#" style="color:#2563eb; margin-right: 1rem;"><i class="fab fa-twitter"></i></a>
+          <a href="#" style="color:#2563eb;"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p><i class="far fa-copyright"></i> ২০২৫ CSE AI Centre — ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটি</p>
+    <p><i class="fas fa-heart" style="color:#f97316;"></i> উদ্ভাবনে এআই, ভবিষ্যতে ডিআইইউ</p>
+  </div>
+</footer>
+
+<script>
+  (function() {
+    // ---------- পপআপ (5 সেকেন্ড পর দেখাবে) ----------
+    const popup = document.getElementById('welcomePopup');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+    
+    // 5 সেকেন্ড delay করে popup active
+    setTimeout(() => {
+      if(popup) {
+        popup.classList.add('active');
+        document.body.style.overflow = 'hidden'; // ব্যাকগ্রাউন্ড স্ক্রল বন্ধ
+      }
+    }, 5000);
+    
+    function closePopupAndEnableScroll() {
+      if(popup) {
+        popup.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+    
+    if(closePopupBtn) {
+      closePopupBtn.addEventListener('click', closePopupAndEnableScroll);
+    }
+    // পপআপের ব্যাকগ্রাউন্ড ক্লিক করলেও বন্ধ হবে (ইউজার ফ্রেন্ডলি)
+    if(popup) {
+      popup.addEventListener('click', function(e) {
+        if(e.target === popup) closePopupAndEnableScroll();
+      });
+    }
+    
+    // ---------- হ্যামবার্গার মেনু ----------
+    const hamburger = document.getElementById('hamburgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const overlayDiv = document.getElementById('overlay');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    const desktopLinks = document.querySelectorAll('.nav-links a');
+    
+    function openMobileMenu() {
+      mobileMenu.classList.add('open');
+      overlayDiv.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      overlayDiv.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    hamburger.addEventListener('click', openMobileMenu);
+    closeMenuBtn.addEventListener('click', closeMobileMenu);
+    overlayDiv.addEventListener('click', closeMobileMenu);
+    
+    // মোবাইল লিংক ক্লিক করলে স্মুথ স্ক্রল + মেনু বন্ধ
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const targetElem = document.getElementById(targetId);
+        if(targetElem) {
+          closeMobileMenu();
+          targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          updateActiveLink(targetId);
+        }
+      });
+    });
+    
+    // ডেস্কটপ নেভিগেশন স্মুথ স্ক্রল
+    desktopLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const hash = link.getAttribute('href').substring(1);
+        const target = document.getElementById(hash);
+        if(target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          updateActiveLink(hash);
+        }
+      });
+    });
+    
+    function updateActiveLink(sectionId) {
+      desktopLinks.forEach(link => {
+        const href = link.getAttribute('href').substring(1);
+        if(href === sectionId) link.classList.add('active');
+        else link.classList.remove('active');
+      });
+    }
+    
+    // স্ক্রল স্পাই
+    const sections = document.querySelectorAll('section');
+    function setActiveOnScroll() {
+      let current = '';
+      const scrollPos = window.scrollY + 130;
+      sections.forEach(sec => {
+        const top = sec.offsetTop;
+        const bottom = top + sec.offsetHeight;
+        if(scrollPos >= top && scrollPos < bottom) {
+          current = sec.getAttribute('id');
+        }
+      });
+      if(current) {
+        desktopLinks.forEach(link => {
+          link.classList.remove('active');
+          if(link.getAttribute('href').substring(1) === current) link.classList.add('active');
+        });
+      }
+    }
+    window.addEventListener('scroll', setActiveOnScroll);
+    window.addEventListener('load', () => {
+      setActiveOnScroll();
+      // home সক্রিয় করা
+      updateActiveLink('home');
+    });
+    
+    // হোম বাটন ও জয়েন বাটন
+    const primaryBtn = document.querySelector('.btn-primary');
+    if(primaryBtn && primaryBtn.getAttribute('href') === '#about') {
+      primaryBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+    const outlineBtn = document.querySelector('.btn-outline');
+    if(outlineBtn && outlineBtn.getAttribute('href') === '#contact') {
+      outlineBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+  })();
+</script>
+</body>
+</html>
